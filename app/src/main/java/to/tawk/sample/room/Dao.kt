@@ -3,7 +3,6 @@ package to.tawk.sample.room
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
 import to.tawk.sample.data.Note
 import to.tawk.sample.data.User
 

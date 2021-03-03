@@ -6,11 +6,12 @@ import androidx.lifecycle.liveData
 import kotlinx.coroutines.Dispatchers
 import to.tawk.sample.api.ApiClient
 import to.tawk.sample.data.User
+import to.tawk.sample.di.UserDAO
 import to.tawk.sample.room.UserDao
 import to.tawk.sample.utils.Resource
 import javax.inject.Inject
 
-class UsersRepository @Inject constructor(private val apiClient: ApiClient, private val userDao:UserDao) {
+class UsersRepository @Inject constructor(private val apiClient: ApiClient,@UserDAO private val userDao:UserDao) {
 
      fun getUsers(since:Int): LiveData<Resource<List<User>>> {
 

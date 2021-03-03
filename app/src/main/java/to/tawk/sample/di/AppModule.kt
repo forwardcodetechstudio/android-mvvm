@@ -12,9 +12,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import to.tawk.sample.R
-import to.tawk.sample.api.ApiHelper
 import to.tawk.sample.api.ApiService
-import to.tawk.sample.api.ApiHelperImpl
+import to.tawk.sample.api.ApiClient
 import to.tawk.sample.room.AppDatabase
 import to.tawk.sample.room.UserDao
 import to.tawk.sample.utils.BASE_URL
@@ -22,7 +21,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ActivityComponent::class)
-object AppModule {
+class AppModule {
 
     @Singleton
     @Provides
@@ -60,13 +59,12 @@ object AppModule {
         ).build()
     }
 
+    @Provides
+    @Singleton
+    fun provideApiService(retrofit: Retrofit):ApiService = retrofit.create(ApiService::class.java)
 
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit) = retrofit.create(ApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideApiHelper(apiHelper: ApiHelperImpl): ApiHelper = apiHelper
+    fun provideApiHelper(apiService: ApiService): ApiClient = ApiClient(apiService)
 }

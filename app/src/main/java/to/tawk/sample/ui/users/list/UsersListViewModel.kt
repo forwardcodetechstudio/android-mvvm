@@ -1,9 +1,8 @@
 package to.tawk.sample.ui.users.list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 
 import to.tawk.sample.data.User
 import to.tawk.sample.repository.UsersRepository
@@ -13,21 +12,23 @@ import javax.inject.Inject
 @HiltViewModel
 class UsersListViewModel @Inject constructor(private val repository: UsersRepository): ViewModel() {
     private val originalUsersList = mutableListOf<User>()
-    private val filteredUsersList = mutableListOf<User>()
 
-    private var pageSize=0
+    val loading=MutableLiveData(false)
 
-    private val _users = MutableLiveData<Resource<List<User>>>()
-
-    val users : LiveData<Resource<List<User>>>
-        get() = _users
+    private val since: MutableStateFlow<Int> = MutableStateFlow(0)
+     var pageSize=10
 
 
-    init {
-        getGitUsers()
+    val users : LiveData<Resource<List<User>>> = since.asLiveData().switchMap {
+        repository.getUsers(it,pageSize).asLiveData()
     }
 
-    private fun getGitUsers() = repository.getUsers(0)
+
+    fun addUsersToList(list: List<User>){
+        originalUsersList.addAll(list)
+    }
+
+    fun getOriginalList() = originalUsersList
 
 }
 

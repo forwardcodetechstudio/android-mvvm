@@ -2,26 +2,21 @@ package to.tawk.sample.room
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import to.tawk.sample.data.Note
 import to.tawk.sample.data.User
 
 @Dao
 interface UserDao {
 
-    @Query("SELECT * FROM user")
-    suspend fun getUsers(): List<User>
+    @Query("SELECT * FROM user WHERE id>:since LIMIT :pageSize")
+    suspend fun getUsers(since:Int, pageSize:Int): List<User>
 
-    @Insert
-    suspend fun insertUser(user: User)
-
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllUsers(users: List<User>)
 
-    @Insert
-    suspend fun insertNote(note: Note)
 
-    @Query("UPDATE note SET notes=:notes WHERE id=:id")
+    @Query("UPDATE user SET notes=:notes WHERE id=:id")
     suspend fun updateNote(id: Int,notes:String)
 
 }

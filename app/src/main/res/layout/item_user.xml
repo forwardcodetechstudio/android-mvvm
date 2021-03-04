@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -13,6 +14,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
         android:background="?selectableItemBackground"
         android:padding="@dimen/_12sdp">
 
@@ -21,6 +24,7 @@
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
             android:contentDescription="@null"
+            bind:image="@{model.avatar_url}"
             android:src="@mipmap/ic_launcher"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,6 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{model.login}"
+            android:textStyle="bold"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_4sdp"
@@ -50,10 +55,10 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="@dimen/_32sdp"
-            android:visibility="@{model.hasNotes? View.VISIBLE:View.GONE}"
-            android:layout_height="@dimen/_32sdp"
-            android:src="@android:drawable/btn_default_small"
+            android:layout_width="@dimen/_24sdp"
+            android:visibility="@{model.hasNotes() ? View.VISIBLE: View.GONE}"
+            android:layout_height="@dimen/_24sdp"
+            android:src="@drawable/ic_note"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

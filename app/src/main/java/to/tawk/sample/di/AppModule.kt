@@ -58,7 +58,7 @@ class AppModule {
                 appContext.getString(
                         R.string.app_name
                 )
-        ).build()
+        ) .fallbackToDestructiveMigration().build()
     }
 
     @Provides
@@ -70,8 +70,4 @@ class AppModule {
     @Singleton
     fun provideApiHelper(apiService: ApiService): ApiClient = ApiClient(apiService)
 
-//    @Provides
-//    fun providesUserDao(): UserDao? {
-//        return DatabUserDao.class
-//    }
 }

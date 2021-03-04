@@ -9,16 +9,27 @@ import androidx.recyclerview.widget.RecyclerView
 import to.tawk.sample.data.User
 import to.tawk.sample.databinding.ItemUserBinding
 
-class UsersListAdapter(private val context: Context): ListAdapter<User, UsersListAdapter.UserVH>(
-    UsersDiffCallback()
-) {
+class UsersListAdapter(private val context: Context): RecyclerView.Adapter<UsersListAdapter.UserVH>() {
+
+    private val usersList= mutableListOf<User>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserVH {
        return UserVH(ItemUserBinding.inflate(LayoutInflater.from(context), parent, false))
     }
 
     override fun onBindViewHolder(holder: UserVH, position: Int) {
-       holder.bindData(getItem(holder.adapterPosition))
+       holder.bindData(usersList[holder.adapterPosition])
+    }
+
+    override fun getItemCount(): Int {
+        return usersList.size
+    }
+
+    fun addUsers(data: List<User>){
+        usersList.clear()
+        usersList.addAll(data)
+        notifyDataSetChanged()
+
     }
 
 
@@ -56,13 +67,15 @@ class UsersListAdapter(private val context: Context): ListAdapter<User, UsersLis
                 binding.model = this
             }
 
-            if(adapterPosition%4==0){
-                binding.imageView.colorFilter = ColorMatrixColorFilter(NEGATIVE)
+            if(adapterPosition>0 && adapterPosition%4==0){
+                binding.imageView2.colorFilter = ColorMatrixColorFilter(NEGATIVE)
             }
 
             binding.executePendingBindings()
         }
     }
+
+
 
 
 }

@@ -11,12 +11,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UsersListViewModel @Inject constructor(private val repository: UsersRepository): ViewModel() {
+
     private val originalUsersList = mutableListOf<User>()
-
     val loading=MutableLiveData(false)
-
     private val since: MutableStateFlow<Int> = MutableStateFlow(0)
-     var pageSize=10
+    var pageSize=30
+
+    var isInSearchMode=false
+
+
 
 
     val users : LiveData<Resource<List<User>>> = since.asLiveData().switchMap {
@@ -25,10 +28,15 @@ class UsersListViewModel @Inject constructor(private val repository: UsersReposi
 
 
     fun addUsersToList(list: List<User>){
+        originalUsersList.clear()
         originalUsersList.addAll(list)
     }
 
     fun getOriginalList() = originalUsersList
+
+    fun loadMore(){
+        since.value = originalUsersList[originalUsersList.size-1].id
+    }
 
 }
 

@@ -10,5 +10,9 @@ class ApiClient @Inject constructor(private val apiService: ApiService) {
         return apiService.getUser(since)
     }
 
+    suspend fun fetchProfile(userName: String): Response<User> {
+        return apiService.fetchProfile(userName)
+    }
+
 
 }

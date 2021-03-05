@@ -43,7 +43,7 @@ class UsersRepository @Inject constructor(
 
     }
 
-    fun updateNote(userId: Int, noteText: String): Flow<Resource<Boolean>> {
+    fun updateNote(userId: Int, noteText: String?): Flow<Resource<Boolean>> {
         return flow {
 
             try {
@@ -51,6 +51,24 @@ class UsersRepository @Inject constructor(
 
                 emit(Resource.success(true))
 
+            } catch (ex: Exception) {
+                emit(Resource.error(ex.message ?: "Something went wrong", null))
+            }
+
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun fetchProfile(username: String): Flow<Resource<User>> {
+        return flow {
+            try {
+                emit(Resource.loading(null))
+                val resp = apiClient.fetchProfile(username)
+                val user = resp.body()
+                user?.let {
+                    val userNote = userDao.getNote(user.id)
+                    it.notes = userNote
+                }
+                emit(Resource.success(user))
             } catch (ex: Exception) {
                 emit(Resource.error(ex.message ?: "Something went wrong", null))
             }

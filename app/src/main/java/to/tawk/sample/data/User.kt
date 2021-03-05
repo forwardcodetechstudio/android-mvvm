@@ -11,7 +11,9 @@ data class User(
     @ColumnInfo(name = "login") val login: String?,
     @ColumnInfo(name = "avatar_url") val avatar_url: String?,
     @ColumnInfo(name = "url") val url: String?,
-    @ColumnInfo(name = "notes") val notes: String?,
+    @ColumnInfo(name = "notes") var notes: String?,
+    @ColumnInfo(name = "followers") val followers: Int,
+    @ColumnInfo(name = "following") val following: Int,
 ){
 
     fun hasNotes():Boolean{

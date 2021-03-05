@@ -17,6 +17,9 @@ interface UserDao {
 
 
     @Query("UPDATE user SET notes=:notes WHERE id=:id")
-    suspend fun updateNote(id: Int,notes:String)
+    suspend fun updateNote(id: Int,notes:String?)
+
+    @Query("SELECT notes FROM user WHERE id=:id")
+    suspend fun getNote(id: Int): String?
 
 }

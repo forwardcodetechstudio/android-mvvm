@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import to.tawk.sample.data.User
 import to.tawk.sample.databinding.ItemUserBinding
 
-class UsersListAdapter(private val context: Context): RecyclerView.Adapter<UsersListAdapter.UserVH>() {
+class UsersListAdapter(private val context: Context, private val onClick: (user: User)->Unit): RecyclerView.Adapter<UsersListAdapter.UserVH>() {
 
     private val usersList= mutableListOf<User>()
 
@@ -69,6 +69,10 @@ class UsersListAdapter(private val context: Context): RecyclerView.Adapter<Users
 
             if(adapterPosition>0 && adapterPosition%4==0){
                 binding.imageView2.colorFilter = ColorMatrixColorFilter(NEGATIVE)
+            }
+
+            itemView.setOnClickListener {
+                onClick(user)
             }
 
             binding.executePendingBindings()

@@ -6,5 +6,17 @@
     <fragment
         android:id="@+id/usersListFragment"
         android:name="to.tawk.sample.ui.users.list.UsersListFragment"
-        android:label="UsersListFragment" />
+        android:label="UsersListFragment" >
+        <action
+            android:id="@+id/action_usersListFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="to.tawk.sample.ui.users.detail.ProfileFragment"
+        android:label="ProfileFragment" >
+        <argument
+            android:name="username"
+            app:argType="string" />
+    </fragment>
 </navigation>

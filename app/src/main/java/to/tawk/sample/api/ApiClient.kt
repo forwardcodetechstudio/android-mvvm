@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class ApiClient @Inject constructor(private val apiService: ApiService) {
 
-     suspend fun getUsers(since: Int): Response<List<User>> {
-        return apiService.getUser(since)
+     suspend fun getUsers(since: Int, pageSize:Int): Response<List<User>> {
+        return apiService.getUser(since, pageSize)
     }
 
     suspend fun fetchProfile(userName: String): Response<User> {

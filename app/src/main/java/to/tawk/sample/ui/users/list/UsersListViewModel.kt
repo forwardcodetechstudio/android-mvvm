@@ -15,7 +15,7 @@ class UsersListViewModel @Inject constructor(private val repository: UsersReposi
     private val originalUsersList = mutableListOf<User>()
     val loading=MutableLiveData(false)
     private val since: MutableStateFlow<Int> = MutableStateFlow(0)
-    var pageSize=30
+    var pageSize=0
 
     var isInSearchMode=false
 
@@ -28,7 +28,6 @@ class UsersListViewModel @Inject constructor(private val repository: UsersReposi
 
 
     fun addUsersToList(list: List<User>){
-        originalUsersList.clear()
         originalUsersList.addAll(list)
     }
 

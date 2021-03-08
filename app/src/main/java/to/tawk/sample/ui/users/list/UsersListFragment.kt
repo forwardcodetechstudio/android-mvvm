@@ -50,6 +50,7 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
     }
 
     private fun observeUserList() {
+
         usersListViewModel.users.observe(viewLifecycleOwner, {result->
             when(result.status){
                 Status.LOADING->{
@@ -60,6 +61,7 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
                     result.data?.let{users->
                         usersListViewModel.addUsersToList(users)
                         usersListAdapter.addUsers(users)
+                        usersListViewModel.pageSize=users.size // setting page size after first load
                     }
 
                 }
@@ -102,7 +104,6 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
                  true
             }
 
-
             // add text change listener
             addTextChangedListener {
 
@@ -115,10 +116,10 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
                     usersListViewModel.isInSearchMode=true
                     val filtered = usersListViewModel.getOriginalList()
                         .filter {user->
-                            user.login!!.contains(it!!.toString())
+                            user.login!!.contains(it!!.toString()) || user.login== it.toString()
                         }
 
-                    usersListAdapter.addUsers(filtered)
+                    usersListAdapter.addUsers(filtered, true)
                 }
 
             }

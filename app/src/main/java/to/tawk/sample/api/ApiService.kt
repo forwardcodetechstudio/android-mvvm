@@ -10,7 +10,7 @@ interface ApiService {
 
 
     @GET("users")
-    suspend fun getUser(@Query("since") lastUserId: Int): Response<List<User>>
+    suspend fun getUser(@Query("since") lastUserId: Int, @Query("per_page") pageSize:Int): Response<List<User>>
 
     @GET("users/{username}")
     suspend fun fetchProfile(@Path("username") username: String): Response<User>

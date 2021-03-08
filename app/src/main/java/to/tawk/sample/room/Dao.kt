@@ -9,8 +9,8 @@ import to.tawk.sample.data.User
 @Dao
 interface UserDao {
 
-    @Query("SELECT * FROM user WHERE id>:since LIMIT :pageSize")
-    suspend fun getUsers(since:Int, pageSize:Int): List<User>
+    @Query("SELECT * FROM user WHERE id>:since")
+    suspend fun getUsers(since:Int): List<User>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllUsers(users: List<User>)

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import to.tawk.sample.data.User
 import to.tawk.sample.databinding.ItemUserBinding
 
@@ -18,11 +19,16 @@ class UsersListAdapter(private val context: Context, private val onClick: (user:
     }
 
     override fun onBindViewHolder(holder: UserVH, position: Int) {
+        holder.setIsRecyclable(false)
        holder.bindData(usersList[holder.adapterPosition])
     }
 
     override fun getItemCount(): Int {
         return usersList.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return usersList[position].id.toLong()
     }
 
     fun addUsers(data: List<User>, clear:Boolean=false){
@@ -34,7 +40,7 @@ class UsersListAdapter(private val context: Context, private val onClick: (user:
     }
 
 
-    inner class UserVH(private val binding: ItemUserBinding): RecyclerView.ViewHolder(binding.root){
+    inner class UserVH( val binding: ItemUserBinding): RecyclerView.ViewHolder(binding.root){
 
         /**
          * Color matrix that flips the components (`-1.0f * c + 255 = 255 - c`)
@@ -68,7 +74,7 @@ class UsersListAdapter(private val context: Context, private val onClick: (user:
                 binding.model = this
             }
 
-            if(adapterPosition>0 && adapterPosition%4==0){
+            if(bindingAdapterPosition>0 && bindingAdapterPosition%4==0){
                 binding.imageView2.colorFilter = ColorMatrixColorFilter(NEGATIVE)
             }
 

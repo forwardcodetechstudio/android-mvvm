@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +35,15 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
             val dir = UsersListFragmentDirections.actionUsersListFragmentToProfileFragment(it.login!!)
             findNavController().navigate(dir)
         }
+
+    }
+
+    private val loadingAdapter by lazy {
+        LoaderAdapter()
+    }
+
+    private val usersAdapter by lazy {
+        ConcatAdapter()
     }
 
 
@@ -54,16 +64,15 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
         usersListViewModel.users.observe(viewLifecycleOwner, {result->
             when(result.status){
                 Status.LOADING->{
-                    usersListViewModel.loading.value=true
+                    usersAdapter.addAdapter(loadingAdapter)
                 }
                 Status.SUCCESS ->{
-                    usersListViewModel.loading.value=false
+                    usersAdapter.removeAdapter(loadingAdapter)
                     result.data?.let{users->
                         usersListViewModel.addUsersToList(users)
                         usersListAdapter.addUsers(users)
                         usersListViewModel.pageSize=users.size // setting page size after first load
                     }
-
                 }
                 Status.ERROR->{
                     view?.showSnackBar(result.message)
@@ -74,15 +83,18 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
 
 
     private fun setupUserList() {
+        usersListAdapter.setHasStableIds(true)
+        usersAdapter.addAdapter(usersListAdapter)
+
         binding.usersList.apply {
-            adapter = usersListAdapter
+            adapter = usersAdapter
+            setHasFixedSize(true)
             addItemDecoration(DividerItemDecoration(this.context,DividerItemDecoration.VERTICAL))
 
             addOnScrollListener(object: MyRecyclerViewScrollListener(this.layoutManager as LinearLayoutManager) {
                 override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
 
-                    if(!usersListViewModel.isInSearchMode){
-                        showSnackBar("Loading more")
+                    if(!usersListViewModel.isInSearchMode && usersListAdapter.itemCount>10){
                         usersListViewModel.loadMore()
                     }
                 }
@@ -116,7 +128,8 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
                     usersListViewModel.isInSearchMode=true
                     val filtered = usersListViewModel.getOriginalList()
                         .filter {user->
-                            user.login!!.contains(it!!.toString()) || user.login== it.toString()
+                            user.login!!.toLowerCase().contains(it!!.toString().toLowerCase()) || user.login.equals(
+                                it.toString(), ignoreCase = true)
                         }
 
                     usersListAdapter.addUsers(filtered, true)

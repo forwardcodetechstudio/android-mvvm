@@ -102,7 +102,6 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
 
 
     private fun setupUserList() {
-        usersListAdapter.setHasStableIds(true)
         usersAdapter.addAdapter(usersListAdapter)
 
         binding.usersList.apply {

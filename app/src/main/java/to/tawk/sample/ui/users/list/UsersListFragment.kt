@@ -35,7 +35,6 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
             val dir = UsersListFragmentDirections.actionUsersListFragmentToProfileFragment(it.login!!)
             findNavController().navigate(dir)
         }
-
     }
 
     private val loadingAdapter by lazy {
@@ -57,17 +56,37 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
         setupUserList()
         setupUserSearch()
         observeUserList()
+
+
+        usersListViewModel.loadingMore.observe(viewLifecycleOwner, {
+            if(it)
+            usersAdapter.addAdapter(loadingAdapter)
+        })
     }
 
+
     private fun observeUserList() {
+
 
         usersListViewModel.users.observe(viewLifecycleOwner, {result->
             when(result.status){
                 Status.LOADING->{
-                    usersAdapter.addAdapter(loadingAdapter)
+                    binding.shimmerLayout.apply {
+                        showShimmer(true)
+                    }
+
                 }
+
                 Status.SUCCESS ->{
-                    usersAdapter.removeAdapter(loadingAdapter)
+                    binding.shimmerLayout.apply {
+                        visibility= View.GONE
+                    }
+
+                    if(usersAdapter.adapters.size>1){
+                        usersAdapter.removeAdapter(loadingAdapter)
+                    }
+
+
                     result.data?.let{users->
                         usersListViewModel.addUsersToList(users)
                         usersListAdapter.addUsers(users)
@@ -102,6 +121,8 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
             })
         }
     }
+
+
 
     private fun setupUserSearch() {
         binding.search.apply {

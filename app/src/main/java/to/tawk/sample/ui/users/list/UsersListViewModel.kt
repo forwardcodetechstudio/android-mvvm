@@ -13,7 +13,7 @@ import javax.inject.Inject
 class UsersListViewModel @Inject constructor(private val repository: UsersRepository): ViewModel() {
 
     private val originalUsersList = mutableListOf<User>()
-    val loading=MutableLiveData(false)
+    val loadingMore=MutableLiveData(false)
     private val since: MutableStateFlow<Int> = MutableStateFlow(0)
     var pageSize=0
 
@@ -34,6 +34,7 @@ class UsersListViewModel @Inject constructor(private val repository: UsersReposi
     fun getOriginalList() = originalUsersList
 
     fun loadMore(){
+        loadingMore.value=true
         since.value = originalUsersList[originalUsersList.size-1].id
     }
 

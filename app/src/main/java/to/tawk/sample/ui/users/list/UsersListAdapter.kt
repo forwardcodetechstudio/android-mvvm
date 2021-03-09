@@ -27,10 +27,6 @@ class UsersListAdapter(private val context: Context, private val onClick: (user:
         return usersList.size
     }
 
-    override fun getItemId(position: Int): Long {
-        return usersList[position].id.toLong()
-    }
-
     fun addUsers(data: List<User>, clear:Boolean=false){
         if(clear)
             usersList.clear()
